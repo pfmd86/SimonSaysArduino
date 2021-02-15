@@ -67,7 +67,7 @@ void showpattern() {
   for (int i = 0; i < level; i++) {
     int seq = GAME[i];
     digitalWrite(LED[seq], HIGH);
-    tone(BUZZER,FRQ[seq]);
+    tone(BUZZER, FRQ[seq]);
     delay(velocity);
     digitalWrite(LED[seq], LOW);
     noTone(BUZZER);
@@ -81,7 +81,7 @@ void getpattern() {
     while (flag == 0) {
       if (digitalRead(BTN_1) == LOW) {
         digitalWrite(LED_1, HIGH);
-        tone(BUZZER,FRQ[0]);
+        tone(BUZZER, FRQ[0]);
         player_input[i] = 0;
         flag = 1;
         delay(200);
@@ -94,7 +94,7 @@ void getpattern() {
       }
       if (digitalRead(BTN_2) == LOW) {
         digitalWrite(LED_2, HIGH);
-        tone(BUZZER,FRQ[1]);
+        tone(BUZZER, FRQ[1]);
         player_input[i] = 1;
         flag = 1;
         delay(200);
@@ -107,7 +107,7 @@ void getpattern() {
       }
       if (digitalRead(BTN_3) == LOW) {
         digitalWrite(LED_3, HIGH);
-        tone(BUZZER,FRQ[2]);
+        tone(BUZZER, FRQ[2]);
         player_input[i] = 2;
         flag = 1;
         delay(200);
@@ -120,7 +120,7 @@ void getpattern() {
       }
       if (digitalRead(BTN_4) == LOW) {
         digitalWrite(LED_4, HIGH);
-        tone(BUZZER,FRQ[3]);
+        tone(BUZZER, FRQ[3]);
         player_input[i] = 3;
         flag = 1;
         delay(200);
@@ -141,16 +141,16 @@ void wrongpattern() {
     for (int n = 0; n < sizeof(LED); n++) {
       digitalWrite(LED[n], HIGH);
     }
-     tone(BUZZER,400);
-     delay(200);
-      tone(BUZZER,200);
-      delay(200);
-      tone(BUZZER,100);
-      delay(200);
-    
+    tone(BUZZER, 400);
+    delay(200);
+    tone(BUZZER, 200);
+    delay(200);
+    tone(BUZZER, 100);
+    delay(200);
+
     for (int n = 0; n < sizeof(LED); n++) {
       digitalWrite(LED[n], LOW);
-      
+
     }
     noTone(BUZZER);
     delay(250);
@@ -158,7 +158,7 @@ void wrongpattern() {
   level = 1;
   velocity = 500;
   delay(1000);
- 
+
 }
 
 void rightpattern() {
@@ -169,9 +169,9 @@ void rightpattern() {
     delay(250);
     for (int n = 0; n < sizeof(LED); n++) {
       //digitalWrite(LED[n], HIGH);
-      tone(BUZZER,1600,20);
+      tone(BUZZER, 1600, 20);
       delay(20);
-      tone(BUZZER,1600,20);
+      tone(BUZZER, 1600, 20);
     }
     delay(500);
     for (int n = 0; n < sizeof(LED); n++) {
@@ -185,7 +185,7 @@ void rightpattern() {
     // increase level
     level++;
     velocity -= 20;
-    
+
   }
 }
 
@@ -200,7 +200,18 @@ void showPoints(int points) {
     alpha4.writeDigitAscii(2, punkte.charAt(0));
   }
   // write it out!
-  
+
   alpha4.writeDisplay();
   //Serial.println(punkte);
+}
+
+void showLostMessage() {
+  // Random number, change the max if to your words array size
+  int randnum = random(0, 9);
+  String currentword = words[randnum];
+  alpha4.writeDigitAscii(0, currentword.charAt(0));
+  alpha4.writeDigitAscii(1, currentword.charAt(1));
+  alpha4.writeDigitAscii(2, currentword.charAt(2));
+  alpha4.writeDigitAscii(3, currentword.charAt(3));
+  alpha4.writeDisplay();
 }
