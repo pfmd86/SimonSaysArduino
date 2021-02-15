@@ -26,7 +26,9 @@ char *words[] = {"FAIL","POOP","BOOO","DAMN","FUCK","SHIT","MIST","UPPS","LOST"}
 Adafruit_AlphaNum4 alpha4 = Adafruit_AlphaNum4();
 
 void setup() {
-  Serial.begin(9600);
+  // Start serial communication for debugging
+  // Serial.begin(9600);
+  // Start display communication
   alpha4.begin(0x70);
   // SET LED PINS TO OUTPUT
   for (int n = 0; n < sizeof(LED); n ++) {
@@ -40,11 +42,9 @@ void setup() {
   pinMode(BUZZER, OUTPUT);
   pinMode(START_BTN, INPUT);
 
-
 }
 
 void loop() {
-  Serial.println(level);
   if (level == 1) {
     generatepattern();
   }
@@ -56,12 +56,15 @@ void loop() {
 }
 
 void generatepattern() {
+  // generates the game pattern
+  // called in loop()
   randomSeed(millis());
   for (int i = 0; i < MAX_LEVEL; i++) {
     GAME[i] = random(0, sizeof(LED));
   }
 }
 void showpattern() {
+  //function to play the game pattern
   for (int i = 0; i < sizeof(LED); i++) {
     digitalWrite(LED[i], LOW);
   }
@@ -138,6 +141,8 @@ void getpattern() {
 }
 
 void wrongpattern() {
+  // triggered when the input pattern was not equal to the game pattern
+  // called in getpattern()
   for (int i = 0; i < 1; i++) {
     for (int n = 0; n < sizeof(LED); n++) {
       digitalWrite(LED[n], HIGH);
@@ -166,6 +171,8 @@ void wrongpattern() {
 }
 
 void rightpattern() {
+  //triggered when the input pattern was equal to the game getpattern
+  //called in getpattern()
   for (int i = 0; i < 1; i++) {
     for (int n = 0; n < sizeof(LED); n++) {
       digitalWrite(LED[n], LOW);
@@ -178,22 +185,21 @@ void rightpattern() {
       tone(BUZZER, 1600, 20);
     }
     delay(500);
-    for (int n = 0; n < sizeof(LED); n++) {
-      //digitalWrite(LED[n], LOW);
-    }
-    delay(200);
   }
   if (level < MAX_LEVEL) {
     // show points
     showPoints(level);
     // increase level
     level++;
+    // reduce velocity to speed up the game
     velocity -= 20;
 
   }
 }
 
 void showPoints(int points) {
+  //shows the current points after each correct round & in the end of the game
+  // called in rightpattern() and wrongpattern() function
   alpha4.clear();
   String punkte = String(points);
   len = punkte.length();
@@ -204,13 +210,14 @@ void showPoints(int points) {
     alpha4.writeDigitAscii(2, punkte.charAt(0));
   }
   // write it out!
-
   alpha4.writeDisplay();
-  //Serial.println(punkte);
 }
 
 void showLostMessage() {
+  // Shows one of the 4-character words from the words array when user lost the game
+  // called in the wrongpattern() function
   // Random number, change the max if to your words array size
+  randomSeed(analogRead(7));
   int randnum = random(0, 9);
   String currentword = words[randnum];
   alpha4.writeDigitAscii(0, currentword.charAt(0));
