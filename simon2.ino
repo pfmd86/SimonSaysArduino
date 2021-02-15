@@ -22,6 +22,7 @@ int level = 1;
 int velocity = 500;
 int points = 0;
 int len = 0;
+char *words[] = {"FAIL","POOP","BOOO","DAMN","FUCK","SHIT","MIST","UPPS","LOST"};
 Adafruit_AlphaNum4 alpha4 = Adafruit_AlphaNum4();
 
 void setup() {
@@ -147,7 +148,7 @@ void wrongpattern() {
     delay(200);
     tone(BUZZER, 100);
     delay(200);
-
+    showLostMessage();
     for (int n = 0; n < sizeof(LED); n++) {
       digitalWrite(LED[n], LOW);
 
@@ -155,9 +156,12 @@ void wrongpattern() {
     noTone(BUZZER);
     delay(250);
   }
+  delay(1000);
+  alpha4.clear();
+  int lastscore = level - 1;
+  showPoints(lastscore);
   level = 1;
   velocity = 500;
-  delay(1000);
 
 }
 
@@ -214,4 +218,5 @@ void showLostMessage() {
   alpha4.writeDigitAscii(2, currentword.charAt(2));
   alpha4.writeDigitAscii(3, currentword.charAt(3));
   alpha4.writeDisplay();
+  delay(1000);
 }
